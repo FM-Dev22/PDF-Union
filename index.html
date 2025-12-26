@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PeDeFinador 3000 - Unir PDFs, Convertir WEBP, MP4 a GIF y Recortar Videos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔗 PeDeFinador 3000</h1>
+            <p>Une múltiples archivos PDF, convierte imágenes WEBP a JPG, videos MP4 a GIF y recorta videos de forma rápida y sencilla</p>
+        </header>
+
+        <main>
+            <div class="mode-selector">
+                <h3>Selecciona una función:</h3>
+                <div class="mode-buttons">
+                    <button type="button" class="mode-btn active" id="pdfModeBtn">
+                        📄 Unir PDFs
+                    </button>
+                    <button type="button" class="mode-btn" id="webpModeBtn">
+                        🖼️ WEBP a JPG
+                    </button>
+                    <button type="button" class="mode-btn" id="mp4ModeBtn">
+                        🎬 MP4 a GIF
+                    </button>
+                    <button type="button" class="mode-btn" id="trimModeBtn">
+                        ✂️ Recortar Video
+                    </button>
+                </div>
+            </div>
+
+            <div class="upload-section" id="pdfSection">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📁</div>
+                    <h3>Arrastra y suelta tus archivos PDF aquí</h3>
+                    <p>o</p>
+                    <button type="button" class="select-files-btn" id="selectFilesBtn">
+                        Seleccionar archivos PDF
+                    </button>
+                    <input type="file" id="fileInput" multiple accept=".pdf" style="display: none;">
+                    <p class="file-info">Puedes seleccionar múltiples archivos PDF</p>
+                </div>
+            </div>
+
+            <div class="files-list" id="filesList" style="display: none;">
+                <h3>Archivos seleccionados:</h3>
+                <div class="files-container" id="filesContainer"></div>
+                <div class="actions">
+                    <button type="button" class="btn btn-secondary" id="clearFilesBtn">
+                        Limpiar lista
+                    </button>
+                    <button type="button" class="btn btn-primary" id="mergeBtn">
+                        🔗 Unir PDFs
+                    </button>
+                </div>
+            </div>
+
+            <div class="progress-section" id="progressSection" style="display: none;">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <p id="progressText">Procesando archivos...</p>
+            </div>
+
+            <div class="result-section" id="resultSection" style="display: none;">
+                <div class="success-message">
+                    <h3>✅ ¡PDFs unidos exitosamente!</h3>
+                    <p>Tu archivo combinado está listo para descargar</p>
+                    <button type="button" class="btn btn-success" id="downloadBtn">
+                        📥 Descargar PDF combinado
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="newMergeBtn">
+                        🔄 Unir más archivos
+                    </button>
+                </div>
+            </div>
+
+            <div class="upload-section" id="webpSection" style="display: none;">
+                <div class="upload-area" id="webpUploadArea">
+                    <div class="upload-icon">🖼️</div>
+                    <h3>Arrastra y suelta tus archivos WEBP aquí</h3>
+                    <p>o</p>
+                    <button type="button" class="select-files-btn" id="selectWebpBtn">
+                        Seleccionar archivos WEBP
+                    </button>
+                    <input type="file" id="webpInput" multiple accept=".webp" style="display: none;">
+                    <p class="file-info">Puedes seleccionar múltiples archivos WEBP</p>
+                </div>
+            </div>
+
+            <div class="files-list" id="webpFilesList" style="display: none;">
+                <h3>Archivos WEBP seleccionados:</h3>
+                <div class="files-container" id="webpFilesContainer"></div>
+                <div class="actions">
+                    <button type="button" class="btn btn-secondary" id="clearWebpBtn">
+                        Limpiar lista
+                    </button>
+                    <button type="button" class="btn btn-primary" id="convertBtn">
+                        🔄 Convertir a JPG
+                    </button>
+                </div>
+            </div>
+
+            <div class="progress-section" id="webpProgressSection" style="display: none;">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="webpProgressFill"></div>
+                </div>
+                <p id="webpProgressText">Convirtiendo archivos...</p>
+            </div>
+
+            <div class="result-section" id="webpResultSection" style="display: none;">
+                <div class="success-message">
+                    <h3>✅ ¡Archivos convertidos exitosamente!</h3>
+                    <p>Tus imágenes JPG están listas para descargar</p>
+                    <div id="downloadLinksContainer"></div>
+                    <button type="button" class="btn btn-secondary" id="newConversionBtn">
+                        🔄 Convertir más archivos
+                    </button>
+                </div>
+            </div>
+
+            <div class="upload-section" id="mp4Section" style="display: none;">
+                <div class="upload-area" id="mp4UploadArea">
+                    <div class="upload-icon">🎬</div>
+                    <h3>Arrastra y suelta tus archivos MP4 aquí</h3>
+                    <p>o</p>
+                    <button type="button" class="select-files-btn" id="selectMp4Btn">
+                        Seleccionar archivos MP4
+                    </button>
+                    <input type="file" id="mp4Input" multiple accept=".mp4" style="display: none;">
+                    <p class="file-info">Puedes seleccionar múltiples archivos MP4</p>
+                </div>
+                
+                <div class="conversion-options" id="mp4Options" style="display: none;">
+                    <h4>Opciones de conversión:</h4>
+                    <div class="options-grid">
+                        <div class="option-group">
+                            <label for="gifWidth">Ancho (px):</label>
+                            <input type="number" id="gifWidth" value="480" min="100" max="1920">
+                        </div>
+                        <div class="option-group">
+                            <label for="gifFps">FPS:</label>
+                            <input type="number" id="gifFps" value="10" min="1" max="30">
+                        </div>
+                        <div class="option-group">
+                            <label for="gifDuration">Duración (seg):</label>
+                            <input type="number" id="gifDuration" value="5" min="1" max="30">
+                        </div>
+                        <div class="option-group">
+                            <label for="gifQuality">Calidad:</label>
+                            <select id="gifQuality">
+                                <option value="high">Alta</option>
+                                <option value="medium" selected>Media</option>
+                                <option value="low">Baja</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="files-list" id="mp4FilesList" style="display: none;">
+                <h3>Archivos MP4 seleccionados:</h3>
+                <div class="files-container" id="mp4FilesContainer"></div>
+                <div class="actions">
+                    <button type="button" class="btn btn-secondary" id="clearMp4Btn">
+                        Limpiar lista
+                    </button>
+                    <button type="button" class="btn btn-primary" id="convertMp4Btn">
+                        🎬 Convertir a GIF
+                    </button>
+                </div>
+            </div>
+
+            <div class="progress-section" id="mp4ProgressSection" style="display: none;">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="mp4ProgressFill"></div>
+                </div>
+                <p id="mp4ProgressText">Convirtiendo videos...</p>
+                <div class="progress-details" id="mp4ProgressDetails"></div>
+            </div>
+
+            <div class="result-section" id="mp4ResultSection" style="display: none;">
+                <div class="success-message">
+                    <h3>✅ ¡Videos convertidos exitosamente!</h3>
+                    <p>Tus archivos GIF están listos para descargar</p>
+                    <div id="mp4DownloadLinksContainer"></div>
+                    <button type="button" class="btn btn-secondary" id="newMp4ConversionBtn">
+                        🔄 Convertir más videos
+                    </button>
+                </div>
+            </div>
+
+            <div class="upload-section" id="trimSection" style="display: none;">
+                <div class="upload-area" id="trimUploadArea">
+                    <div class="upload-icon">✂️</div>
+                    <h3>Arrastra y suelta tu video aquí</h3>
+                    <p>o</p>
+                    <button type="button" class="select-files-btn" id="selectTrimBtn">
+                        Seleccionar video
+                    </button>
+                    <input type="file" id="trimInput" accept=".mp4,.avi,.mov,.mkv,.webm" style="display: none;">
+                    <p class="file-info">Formatos soportados: MP4, AVI, MOV, MKV, WebM</p>
+                </div>
+            </div>
+
+            <div class="video-editor" id="videoEditor" style="display: none;">
+                <h3>Editor de Video</h3>
+                
+                <div class="video-container">
+                    <video id="videoPreview" controls style="width: 100%; max-width: 600px; border-radius: 10px;">
+                        Tu navegador no soporta el elemento video.
+                    </video>
+                </div>
+
+                <div class="trim-controls">
+                    <div class="time-inputs">
+                        <div class="time-group">
+                            <label for="startTime">Tiempo de inicio:</label>
+                            <input type="number" id="startTime" min="0" step="0.1" value="0" placeholder="0.0">
+                            <span class="time-unit">segundos</span>
+                        </div>
+                        <div class="time-group">
+                            <label for="endTime">Tiempo de fin:</label>
+                            <input type="number" id="endTime" min="0" step="0.1" value="0" placeholder="0.0">
+                            <span class="time-unit">segundos</span>
+                        </div>
+                    </div>
+
+                    <div class="timeline-container">
+                        <div class="timeline-info">
+                            <span id="currentTimeDisplay">0:00</span>
+                            <span id="durationDisplay">0:00</span>
+                        </div>
+                        <div class="timeline">
+                            <input type="range" id="timelineSlider" min="0" max="100" value="0" step="0.1">
+                            <div class="trim-markers">
+                                <div class="start-marker" id="startMarker"></div>
+                                <div class="end-marker" id="endMarker"></div>
+                                <div class="selection-area" id="selectionArea"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-buttons">
+                        <button type="button" class="btn btn-secondary" id="setStartBtn">
+                            📍 Marcar inicio
+                        </button>
+                        <button type="button" class="btn btn-secondary" id="setEndBtn">
+                            🏁 Marcar fin
+                        </button>
+                        <button type="button" class="btn btn-secondary" id="previewTrimBtn">
+                            👁️ Vista previa
+                        </button>
+                        <button type="button" class="btn btn-primary" id="trimVideoBtn">
+                            ✂️ Recortar video
+                        </button>
+                    </div>
+
+                    <div class="trim-info">
+                        <p id="trimInfoText">Selecciona los puntos de inicio y fin para recortar el video</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="progress-section" id="trimProgressSection" style="display: none;">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="trimProgressFill"></div>
+                </div>
+                <p id="trimProgressText">Recortando video...</p>
+                <div class="progress-details" id="trimProgressDetails"></div>
+            </div>
+
+            <div class="result-section" id="trimResultSection" style="display: none;">
+                <div class="success-message">
+                    <h3>✅ ¡Video recortado exitosamente!</h3>
+                    <p>Tu video recortado está listo para descargar</p>
+                    <div id="trimDownloadContainer"></div>
+                    <button type="button" class="btn btn-secondary" id="newTrimBtn">
+                        ✂️ Recortar otro video
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>PeDeFinador 3000 - Procesamiento local, tus archivos no se envían a ningún servidor</p>
+        </footer>
+    </div>
+
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://unpkg.com/gif.js@0.2.0/dist/gif.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
